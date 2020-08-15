@@ -165,22 +165,20 @@ public class EnemyBehavior : MonoBehaviour
         enemyAnimator.Play("Shoot");
         shooting = true;
 
-        if (UnityEngine.Random.Range(0, 100) <= accuracy) ///x% chance to hit player
-        {
-            PlayerHealth.playerHealth *= damageMultiplier;
-            PlayerHealth.lastHit = Time.time;
-        }
-    
-        muzzleFlashLight.range = 15;
+        muzzleFlashLight.range = 25;
         muzzleFlashPng.localScale = new Vector3(UnityEngine.Random.Range(0.05f, 0.06f), UnityEngine.Random.Range(0.05f, 0.06f), UnityEngine.Random.Range(0.05f, 0.06f));
         yield return new WaitForSeconds(0.010f);
         muzzleFlashPng.localScale = new Vector3(UnityEngine.Random.Range(0.045f, 0.05f), UnityEngine.Random.Range(0.045f, 0.05f), UnityEngine.Random.Range(0.045f, 0.05f));
         yield return new WaitForSeconds(0.005f);
 
+        if (UnityEngine.Random.Range(0, 100) <= accuracy) ///x% chance to hit player
+        {
+            PlayerHealth.playerHealth *= damageMultiplier;
+            PlayerHealth.lastHit = Time.time;
+        }
+
         muzzleFlashLight.range = 0;
         muzzleFlashPng.localScale = new Vector3(0.00f, 0.00f, 0.00f);
-
-        //yield return new WaitForSeconds(0.5f);
         shooting = false;
     }
 

@@ -70,7 +70,7 @@ public class Shoot : MonoBehaviour
 
     IEnumerator MuzzleFlash()
     {
-        muzzleFlashLight.range = 15;
+        muzzleFlashLight.range = 25;
         muzzleFlashPng.localScale = new Vector3(UnityEngine.Random.Range(0.03f, 0.04f), UnityEngine.Random.Range(0.03f, 0.04f), UnityEngine.Random.Range(0.03f, 0.04f));
         yield return new WaitForSeconds(0.010f);
         muzzleFlashPng.localScale = new Vector3(UnityEngine.Random.Range(0.025f, 0.03f), UnityEngine.Random.Range(0.025f, 0.03f), UnityEngine.Random.Range(0.025f, 0.03f));

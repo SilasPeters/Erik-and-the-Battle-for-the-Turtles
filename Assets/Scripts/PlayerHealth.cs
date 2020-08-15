@@ -42,6 +42,6 @@ public class PlayerHealth : MonoBehaviour
             playerHealth = Mathf.Clamp(playerHealth + (regenAmountPerS * Time.deltaTime), 0, maxHealth);
         } //regent tot max health
 
-        Debug.Log(playerHealth);
+        //doe fov + 0.2 als je geraakt wordt, plus een hit indicator
     }
 }
