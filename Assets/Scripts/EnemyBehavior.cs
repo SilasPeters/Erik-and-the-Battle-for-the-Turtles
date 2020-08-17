@@ -132,7 +132,6 @@ public class EnemyBehavior : MonoBehaviour
     //    }
     //}
 
-    
     private IEnumerator Move(Vector3 pStart, Vector3 pEnd, float moveDuration)
     {
         moving = true;
