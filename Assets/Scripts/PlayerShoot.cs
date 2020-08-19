@@ -9,7 +9,7 @@ using UnityEngine.SocialPlatforms;
 /// Somehow the animation takes twice as long as intended (0.1s in stead of 0.05s)
 /// </summary>
 
-public class Shoot : MonoBehaviour
+public class PlayerShoot : MonoBehaviour
 {
     public Animator animator;
     public Transform cam;

@@ -32,15 +32,19 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxis("Vertical");
         Vector3 horizontalMove = transform.right * x + transform.forward * z;
 
+
+
         bool isGrounded = GetComponent<CharacterController>().SimpleMove(horizontalMove);
         if (isGrounded)
         {
-            verticalMove.y = 0f;
+            verticalMove.y = 0f; //prevents player from falling forever
             if (Input.GetButton("Jump"))
             {
                 verticalMove.y = jumpHeight;
                 //jumpMovement = horizontalMove;
             } //jumps
+
+
 
             if (Input.GetKey("left shift"))
             {
@@ -52,13 +56,15 @@ public class PlayerMovement : MonoBehaviour
                 Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, FOVNormal, FOVShiftTime);
             } //doesn't sprint
 
-        } //prevents player from falling forever
+        }
         else
         {
             //Debug.Log("ungrounded");
             verticalMove.y -= g * massPlayer * Time.deltaTime;
-            //horizontalMove = jumpMovement;
+            //horizontalMove = jumpMovementduszegmaaraangepastesnelheidomdatjenietkuntversnellenindeluchthaha;
         }
+
+
 
         Controller.Move(horizontalMove * MovementSpeed * Time.deltaTime + verticalMove * Time.deltaTime);
     }

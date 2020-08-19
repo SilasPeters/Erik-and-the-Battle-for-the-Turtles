@@ -4,9 +4,9 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public static float playerHealth = 100;
+    public float playerHealth = 100;
     public float maxHealth;
-    public static float lastHit = 0;
+    public float lastTimeHit = 0;
     public PostProcessVolume volume;
 
     private Vignette vignette;
@@ -25,23 +25,28 @@ public class PlayerHealth : MonoBehaviour
     {
         volume.profile.TryGetSettings(out vignette);
         vignette.intensity.value = Mathf.Lerp(vignette.intensity.value,
-                                    Mathf.Clamp((maxVignetteIntensity - minVignetteIntensity) * (1 - playerHealth/100) + minVignetteIntensity, minVignetteIntensity, maxVignetteIntensity),
+                                    Mathf.Clamp((maxVignetteIntensity - minVignetteIntensity) * (1 - playerHealth / 100) + minVignetteIntensity, minVignetteIntensity, maxVignetteIntensity),
                                     vignetteShiftSpeed);
         Debug.Log(vignette.intensity.value);
 
         volume.profile.TryGetSettings(out colorGrading);
         colorGrading.saturation.value = Mathf.Lerp(colorGrading.saturation.value,
-                                        Mathf.Clamp(maxColorGradingSaturation * (1 - playerHealth/100), maxColorGradingSaturation, 0),
+                                        Mathf.Clamp(maxColorGradingSaturation * (1 - playerHealth / 100), maxColorGradingSaturation, 0),
                                         colorGradingShiftSpeed);
         //regelt alle visualFX
         //audio minder
-        
 
-        if (Time.time - lastHit > regenTime && playerHealth < 100) //&& playeHealth < 100 omdat je miss een keer een health boost krijgt en je niet wilt dat hij geclamped wordt naar maxHealth
+        if (Time.time - lastTimeHit > regenTime && playerHealth < 100) //&& playeHealth < 100 omdat je miss een keer een health boost krijgt en je niet wilt dat hij geclamped wordt naar maxHealth
         {
             playerHealth = Mathf.Clamp(playerHealth + (regenAmountPerS * Time.deltaTime), 0, maxHealth);
         } //regent tot max health
 
         //doe fov + 0.2 als je geraakt wordt, plus een hit indicator
+    }
+
+    public void TakeDamage(float damageMultiplier)
+    {
+        playerHealth *= damageMultiplier;
+        lastTimeHit = Time.time;
     }
 }
