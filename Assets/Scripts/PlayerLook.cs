@@ -27,6 +27,6 @@ public class PlayerLook : MonoBehaviour
         mouseY = Mathf.Clamp(mouseY, -85.5f, 85.5f); //prevents the player from breaking his virtual neck
 
         Player.Rotate(0, mouseX, 0);
-        Cam.localEulerAngles = new Vector3(-mouseY, 0.0f, 0.0f); //rotates the cam and not the player, because, yeah, you don't move your whole body when looking up. Why *-1? I don't know man.
+        Cam.localEulerAngles = new Vector3(-mouseY, Cam.localEulerAngles.y, Cam.localEulerAngles.z); //rotates the cam and not the player, because, yeah, you don't move your whole body when looking up. Why *-1? I don't know man.
     }
 }
