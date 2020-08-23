@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
@@ -8,9 +6,10 @@ public class PlayerHealth : MonoBehaviour
 {
     public float playerHealth = 100;
     public float maxHealth;
-    public float lastTimeHit = 0;
+    private float lastTimeHit = 0;
     public PostProcessVolume volume;
-    public Image hitSource;
+    public Transform UIParent;
+    public Image hitIndicatorSource;
 
     private Vignette vignette;
     public float minVignetteIntensity;
@@ -54,16 +53,29 @@ public class PlayerHealth : MonoBehaviour
         } //when taking damage the player flinches to a side, this returns it to 0 (see TakeDamage() )
     }
 
-    public void TakeDamage(float damageMultiplier, float impact, Vector3 enemyPosition)
+    public void TakeDamage(float damageMultiplier, float flinch, Vector3 enemyPosition, float hitIndicatorOpacity, float hitIndicatorDestroyTime)
     {
         playerHealth *= damageMultiplier;
         lastTimeHit = Time.time;
 
-        
-        Vector3 relativePosition = enemyPosition - transform.position;
-        float angle = Vector3.Angle(relativePosition, transform.forward); //calculates the angle on wich the enemy hit you
+        if (hitIndicatorOpacity != 0)
+        {
+            Vector3 relativePosition = enemyPosition - transform.position;
+            float angle = Vector3.Angle(relativePosition, transform.forward); //calculates the angle on wich the enemy hit you
+                Debug.Log(angle);
 
-        ///instantiate die hit-lagen gebaseerd op waar ze vandaan kwamen
+            Image hitIndicator = Instantiate(hitIndicatorSource, UIParent);
+            var tempColor = hitIndicator.color;
+            tempColor.a = hitIndicatorOpacity;
+            hitIndicator.color = tempColor; //sets initial opacity of the hitIndicator
+            hitIndicator.gameObject.SetActive(true); //source is disabled, but instantiated should be enabled
+
+            hitIndicator.transform.rotation = Quaternion.Euler(hitIndicatorSource.transform.rotation.x, hitIndicatorSource.transform.rotation.y, angle);
+            //sets rotation
+
+            Destroy(hitIndicator.gameObject, hitIndicatorDestroyTime);
+            //destroys (should become fades and destroys)
+        }
 
 
         //flinch *= Mathf.Sin(angle * (Mathf.PI / 180));

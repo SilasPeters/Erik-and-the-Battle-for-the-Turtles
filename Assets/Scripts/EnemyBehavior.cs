@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Security.Cryptography;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -22,6 +19,9 @@ public class EnemyBehavior : MonoBehaviour
     public float damageMultiplier;
     public float flinch;
     public float accuracy;
+    public float hitIndicatorOpacity;
+    public float hitIndicatorDestroyTime;
+
     public float engageDistance;
     public float disengageDistance;
     public float cuddleDistance;
@@ -30,7 +30,7 @@ public class EnemyBehavior : MonoBehaviour
     public float chanceToCyclePos;
 
     private float playerDistance;
-    private Boolean engaged;
+    private bool engaged;
     private bool moving; //prevents the coroutines from being spammed
     //private bool rotating; //prevents the coroutines from being spammed
     private bool shooting; //prevents the coroutines from being spammed
@@ -129,7 +129,8 @@ public class EnemyBehavior : MonoBehaviour
 
         if (UnityEngine.Random.Range(0, 100) <= accuracy) ///x% chance to hit player
         {
-            player.GetComponent<PlayerHealth>().TakeDamage(damageMultiplier, flinch, transform.position);
+            player.GetComponent<PlayerHealth>().TakeDamage(damageMultiplier, flinch, transform.position, hitIndicatorOpacity, hitIndicatorDestroyTime);
+////////////health = 0;
         }
 
         muzzleFlashLight.range = 0;
