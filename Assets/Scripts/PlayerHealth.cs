@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
@@ -53,32 +54,49 @@ public class PlayerHealth : MonoBehaviour
         } //when taking damage the player flinches to a side, this returns it to 0 (see TakeDamage() )
     }
 
-    public void TakeDamage(float damageMultiplier, float flinch, Vector3 enemyPosition, float hitIndicatorOpacity, float hitIndicatorDestroyTime)
+    public void TakeDamage(float damageMultiplier, float flinch, Vector3 enemyPosition, float hitIndicatorOpacity)///, float hitIndicatorLifetime) (zie coroutine ImageFD)
     {
         playerHealth *= damageMultiplier;
         lastTimeHit = Time.time;
 
-        if (hitIndicatorOpacity != 0)
-        {
-            Vector3 relativePosition = enemyPosition - transform.position;
-            float angle = Vector3.Angle(relativePosition, transform.forward); //calculates the angle on wich the enemy hit you
-                Debug.Log(angle);
-
+        if (hitIndicatorOpacity != 0) //do show hitindicator
+        {        
             Image hitIndicator = Instantiate(hitIndicatorSource, UIParent);
             var tempColor = hitIndicator.color;
             tempColor.a = hitIndicatorOpacity;
-            hitIndicator.color = tempColor; //sets initial opacity of the hitIndicator
-            hitIndicator.gameObject.SetActive(true); //source is disabled, but instantiated should be enabled
+            hitIndicator.color = tempColor; 
+            //sets initial opacity of the hitIndicator
 
+            Vector3 relativePosition = enemyPosition - transform.position;
+            relativePosition.y = 0; //You don't want to make Vector3.Angle add the height difference to the total angle difference
+            float angle = Vector3.Angle(relativePosition, transform.forward); //calculates the angle on wich the enemy hit (the smallest angle between the forward and relativePos factor) 
+            if (transform.InverseTransformPoint(enemyPosition).x > 0) { angle = 360 - angle; } //if the enemy is on the right, the angle between the vectors will be substracted from 360, so that the hit indicator lands on the right side
             hitIndicator.transform.rotation = Quaternion.Euler(hitIndicatorSource.transform.rotation.x, hitIndicatorSource.transform.rotation.y, angle);
-            //sets rotation
+////////////x rotation reset naar 0            //sets rotation
 
-            Destroy(hitIndicator.gameObject, hitIndicatorDestroyTime);
-            //destroys (should become fades and destroys)
+            hitIndicator.gameObject.SetActive(true);
+            //source is disabled, but instantiated should be enabled
+
+            StartCoroutine(ImageFD(hitIndicator));
+            //Fades and destroys hitIndicator
         }
 
 
         //flinch *= Mathf.Sin(angle * (Mathf.PI / 180));
         //Camera.main.transform.Rotate(new Vector3(0, 0, flinch));
+    }
+
+    public IEnumerator ImageFD(Image img)///, float duration) //image Fade & Destroy
+    {
+        float FadePerSecond = 0.20f; /// img.color.a / duration; (een vaste duratie)
+
+        var tempColor = img.color;
+        while (tempColor.a > 0)
+        {
+            tempColor.a -= FadePerSecond * Time.deltaTime;
+            img.color = tempColor;
+            yield return null;
+        }
+        Destroy(img.gameObject);
     }
 }

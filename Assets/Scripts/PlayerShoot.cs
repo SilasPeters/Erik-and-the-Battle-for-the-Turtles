@@ -16,6 +16,7 @@ public class PlayerShoot : MonoBehaviour
     public Transform muzzleFlashPng;
     public Light muzzleFlashLight;
 
+    public Transform EDParent;
     public GameObject ground; ///particle system which hits ground
     public GameObject building;
     public GameObject blood;
@@ -42,17 +43,17 @@ public class PlayerShoot : MonoBehaviour
                 if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                 {
                     hit.transform.GetComponentInParent<EnemyBehavior>().TakeDamage(damage);
-                    GameObject hitParticle = Instantiate(blood, hit.point, Quaternion.LookRotation(hit.normal));
+                    GameObject hitParticle = Instantiate(blood, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                 }
                 else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Ground"))
                 {
-                    GameObject hitParticle = Instantiate(ground, hit.point, Quaternion.LookRotation(hit.normal));
+                    GameObject hitParticle = Instantiate(ground, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                 }
                 else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Building"))
                 {
-                    GameObject hitParticle = Instantiate(building, hit.point, Quaternion.LookRotation(hit.normal));
+                    GameObject hitParticle = Instantiate(building, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                 }
                 else

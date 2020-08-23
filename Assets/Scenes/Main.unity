@@ -12511,11 +12511,10 @@ MonoBehaviour:
   enemyAnimator: {fileID: 640984348}
   player: {fileID: 1973459350}
   health: 100
-  damageMultiplier: 0.6
+  damageMultiplier: 0.7
   flinch: 0
   accuracy: 70
-  hitIndicatorOpacity: 0.7
-  hitIndicatorDestroyTime: 0.3
+  hitIndicatorOpacity: 0.4
   engageDistance: 100
   disengageDistance: 100
   cuddleDistance: 40
@@ -14099,17 +14098,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 900217666}
-  m_LocalRotation: {x: 0.33216113, y: 0, z: 0, w: 0.9432227}
+  m_LocalRotation: {x: -0.3420201, y: 0, z: 0, w: 0.9396927}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1467237673}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 38.8, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -40, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 800, y: 449.43823}
+  m_SizeDelta: {x: 1040, y: 584.26965}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &900217668
 MonoBehaviour:
@@ -15368,7 +15367,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 2100000, guid: 4e14c480e50cc1843a00a26355fba062, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -20279,7 +20277,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 2100000, guid: 4e14c480e50cc1843a00a26355fba062, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -30150,6 +30147,7 @@ MonoBehaviour:
   cam: {fileID: 963194228}
   muzzleFlashPng: {fileID: 572276298}
   muzzleFlashLight: {fileID: 364551922}
+  EDParent: {fileID: 1381221730}
   ground: {fileID: 1970385600}
   building: {fileID: 1947710914}
   blood: {fileID: 1847700842}
@@ -30165,7 +30163,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17356
+  m_Name: pb_Mesh15802
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

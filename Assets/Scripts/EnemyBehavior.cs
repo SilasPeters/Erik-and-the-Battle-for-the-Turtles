@@ -20,7 +20,7 @@ public class EnemyBehavior : MonoBehaviour
     public float flinch;
     public float accuracy;
     public float hitIndicatorOpacity;
-    public float hitIndicatorDestroyTime;
+    //public float hitIndicatorLifetime;
 
     public float engageDistance;
     public float disengageDistance;
@@ -129,8 +129,7 @@ public class EnemyBehavior : MonoBehaviour
 
         if (UnityEngine.Random.Range(0, 100) <= accuracy) ///x% chance to hit player
         {
-            player.GetComponent<PlayerHealth>().TakeDamage(damageMultiplier, flinch, transform.position, hitIndicatorOpacity, hitIndicatorDestroyTime);
-////////////health = 0;
+            player.GetComponent<PlayerHealth>().TakeDamage(damageMultiplier, flinch, transform.position, hitIndicatorOpacity);
         }
 
         muzzleFlashLight.range = 0;
