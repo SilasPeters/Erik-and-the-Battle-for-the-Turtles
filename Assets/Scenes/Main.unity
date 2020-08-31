@@ -14108,7 +14108,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1040, y: 584.26965}
+  m_SizeDelta: {x: 728, y: 408.9888}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &900217668
 MonoBehaviour:
@@ -30157,6 +30157,7 @@ MonoBehaviour:
   recoilDuration: 0.1
   range: Infinity
   damage: 50
+  maxAmmo: 31
 --- !u!43 &1975644480
 Mesh:
   m_ObjectHideFlags: 0
