@@ -25,17 +25,26 @@ public class PlayerShoot : MonoBehaviour
     public float recoilDuration; //dit moet gelijk zijn aan de animation duration
     public float range = Mathf.Infinity;
     public float damage;
+    public float maxAmmo;
+    float ammo;
+    bool reloading;
 
-    private float timeLastExec; //this is used to not execute the code unless the last time it was done was more than X seconds ago
+    float timeLastExec; //this is used to not execute the code unless the last time it was done was more than X seconds ago
 
+    private void Start()
+    {
+        ammo = maxAmmo;
+    }
 
     void Update()
     {
-        if (Input.GetButton("Fire1") && Time.time - timeLastExec >= recoilDuration)
+        if (Input.GetButton("Fire1") && Time.time - timeLastExec >= recoilDuration && ammo > 0) //fire
         {
             timeLastExec = Time.time; //sets timer
+            ChangeAmmo(-1);
             animator.Play("Recoil"); //let's the recoil hit once
             StartCoroutine(MuzzleFlash());
+            //all the background things related to shooting
 
             RaycastHit hit;
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range, raycastTarget))
@@ -60,13 +69,23 @@ public class PlayerShoot : MonoBehaviour
                 {
                     Debug.LogWarning("Could not determine layer type of raycast hit");
                 }
-                
+
             }
+            //the actual shooting
         }
-        //else if (Time.time - timeLastExec >= 0.5f && Time.time - timeLastExec <= 0.6f)
-        //{
-        //    smoke.Play();
-        //}
+
+        if (Input.GetKey(KeyCode.R) && !reloading)
+        {
+            reloading = true;
+            
+        }
+    }
+
+    private void ChangeAmmo(float ammoChange)
+    {
+        ammo += ammoChange;
+
+        if (ammo < 0) { Debug.LogWarning("Ammo is less than 0 - Said by ChangeAmmo() in PlayerShoot.cs"); }
     }
 
     IEnumerator MuzzleFlash()

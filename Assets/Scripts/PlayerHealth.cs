@@ -3,6 +3,10 @@ using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
+/// <To do>
+/// Gebruik "list" om oudere hitmarkers van dezelfde enemy te verwijderen, wanneer hij je nog een keer raakt
+/// </To do>
+
 public class PlayerHealth : MonoBehaviour
 {
     public float playerHealth = 100;
@@ -60,20 +64,19 @@ public class PlayerHealth : MonoBehaviour
         lastTimeHit = Time.time;
 
         if (hitIndicatorOpacity != 0) //do show hitindicator
-        {        
+        {
             Image hitIndicator = Instantiate(hitIndicatorSource, UIParent);
             var tempColor = hitIndicator.color;
             tempColor.a = hitIndicatorOpacity;
-            hitIndicator.color = tempColor; 
+            hitIndicator.color = tempColor;
             //sets initial opacity of the hitIndicator
-
             Vector3 relativePosition = enemyPosition - transform.position;
             relativePosition.y = 0; //You don't want to make Vector3.Angle add the height difference to the total angle difference
             float angle = Vector3.Angle(relativePosition, transform.forward); //calculates the angle on wich the enemy hit (the smallest angle between the forward and relativePos factor) 
             if (transform.InverseTransformPoint(enemyPosition).x > 0) { angle = 360 - angle; } //if the enemy is on the right, the angle between the vectors will be substracted from 360, so that the hit indicator lands on the right side
-            hitIndicator.transform.rotation = Quaternion.Euler(hitIndicatorSource.transform.rotation.x, hitIndicatorSource.transform.rotation.y, angle);
-////////////x rotation reset naar 0            //sets rotation
-
+            hitIndicator.transform.rotation = Quaternion.Euler(hitIndicatorSource.transform.rotation.eulerAngles.x, hitIndicatorSource.transform.rotation.eulerAngles.y, angle);
+            //sets rotation (Kan beter gedaan worden door LookRotation?)
+    
             hitIndicator.gameObject.SetActive(true);
             //source is disabled, but instantiated should be enabled
 
