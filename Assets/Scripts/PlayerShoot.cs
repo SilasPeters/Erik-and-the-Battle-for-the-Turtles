@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 /// <summary>
 /// Somehow the animation takes twice as long as intended (0.1s in stead of 0.05s)
