@@ -1,0 +1,58 @@
+﻿using System.Collections;
+using UnityEngine;
+
+public class EntranceRoom_Door : MonoBehaviour
+{
+    public Vector3 posClosed;
+    public Vector3 posOpen;
+    public Transform player;
+    public Transform dialPadText;
+
+    public float progressionPerSecond;
+    public float triggerRange;
+
+    private bool opened;
+    private bool unlocked;
+    public bool Unlocked
+    {
+        get { return unlocked; }
+        set
+        {
+            unlocked = value;
+            dialPadText.GetComponent<TextMesh>().text = "Y u do this";
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Unlocked) //unlocked becomes true when PlayerShoot.cs hits the dialpad at the entrance (which triggers Unlock() )
+        {
+            if (Vector3.Distance(player.position, posClosed) <= triggerRange && !opened) //has to open
+            {
+                StopAllCoroutines();
+                StartCoroutine(OpenClose(transform.position, posOpen, progressionPerSecond));
+                opened = true;
+            }
+            else if (Vector3.Distance(player.position, posClosed) > triggerRange && opened) //has to close
+            {
+                StopAllCoroutines();
+                StartCoroutine(OpenClose(transform.position, posClosed, progressionPerSecond));
+                opened = false;
+            }
+        }
+        
+    }
+
+    IEnumerator OpenClose(Vector3 posA, Vector3 posB, float progressionPerSecond)
+    {
+        float progress = 0;
+        while (progress < 100)
+        {
+            progress += progressionPerSecond * Time.deltaTime;
+            if (progress > 99) progress = 100;
+            transform.position = Vector3.Lerp(posA, posB, progress);
+            yield return null;
+        }       
+    }
+}

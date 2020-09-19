@@ -1,37 +1,36 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class EntranceRoom_Door : MonoBehaviour
+public class Door : MonoBehaviour
 {
     public Vector3 posClosed;
     public Vector3 posOpen;
+    public Transform player;
 
     public float progressionPerSecond;
+    public float triggerRange;
 
-    public Transform player;
-    private bool busy;
     private bool opened;
 
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(player.position, posClosed) <= 50 && !busy && !opened) //has to open
+        if (Vector3.Distance(player.position, posClosed) <= triggerRange && !opened) //has to open
         {
-            StartCoroutine(OpenClose(posClosed, posClosed, progressionPerSecond));
-            Debug.Log("Opening");
+            StopAllCoroutines();
+            StartCoroutine(OpenClose(transform.position, posOpen, progressionPerSecond));
             opened = true;
         }
-        else if (Vector3.Distance(player.position, posOpen) > 50 && !busy && opened) //has to close
+        else if (Vector3.Distance(player.position, posClosed) > triggerRange && opened) //has to close
         {
-            StartCoroutine(OpenClose(posOpen, posClosed, progressionPerSecond));
-            Debug.Log("Closing");
+            StopAllCoroutines();
+            StartCoroutine(OpenClose(transform.position, posClosed, progressionPerSecond));
             opened = false;
-        }
+        }        
     }
 
     IEnumerator OpenClose(Vector3 posA, Vector3 posB, float progressionPerSecond)
     {
-        busy = true;
         float progress = 0;
         while (progress < 100)
         {
@@ -40,6 +39,5 @@ public class EntranceRoom_Door : MonoBehaviour
             transform.position = Vector3.Lerp(posA, posB, progress);
             yield return null;
         }
-        busy = false;
     }
 }

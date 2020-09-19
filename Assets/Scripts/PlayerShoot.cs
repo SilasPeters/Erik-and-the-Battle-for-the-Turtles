@@ -17,6 +17,7 @@ public class PlayerShoot : MonoBehaviour
     public GameObject ground; ///particle system which hits ground
     public GameObject building;
     public GameObject blood;
+    public GameObject electrical;
     public LayerMask raycastTarget;
     public Transform ammoCount;
 
@@ -55,7 +56,7 @@ public class PlayerShoot : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButton("Fire1") && Time.time - timeLastExec >= recoilDuration && ammo > 0 && !reloading) //fire if capable
+        if (Input.GetButton("Fire1") && Time.time - timeLastExec >= recoilDuration && Ammo > 0 && !reloading) //fire if capable
         {
             timeLastExec = Time.time; //sets timer
             Ammo -= 1;
@@ -82,6 +83,12 @@ public class PlayerShoot : MonoBehaviour
                     GameObject hitParticle = Instantiate(building, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                 }
+                else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Dial Pad"))
+                {
+                    GameObject hitParticle = Instantiate(electrical, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
+                    Destroy(hitParticle, 2f);
+                    FindObjectOfType<EntranceRoom_Door>().Unlocked = true;
+                }
                 else
                 {
                     Debug.LogWarning("Could not determine layer type of raycast hit");
@@ -89,13 +96,13 @@ public class PlayerShoot : MonoBehaviour
 
             }
         }
-        else if (ammo == 0) //if the player ran out of ammo he automatically reloads
+        else if (Ammo == 0) //if the player ran out of ammo he automatically reloads
         {
             StartCoroutine(Reload());
         }
         //the actual shooting
 
-        if (Input.GetKey(KeyCode.R) && !reloading && ammo < maxAmmo)
+        if (Input.GetKey(KeyCode.R) && !reloading && Ammo < maxAmmo)
         {
             StartCoroutine(Reload());
         }
