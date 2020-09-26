@@ -10,6 +10,13 @@ public class Hallway_Door : MonoBehaviour
     public Transform doorToTrack;
     public Transform doorLock;
 
+    public ParticleSystem smoke1;
+    public ParticleSystem smoke2;
+    public ParticleSystem smoke3;
+    public ParticleSystem smoke4;
+
+    public Transform cam;
+
     private float counter;
     public float Counter
     {
@@ -56,6 +63,9 @@ public class Hallway_Door : MonoBehaviour
         StartCoroutine(TrackDoor());
     }
 
+
+    //////  EFFECTS  ////////
+
     IEnumerator TrackDoor() //makes sure that the lock follows the door, because when parenting it fucking scales wrong
     {
         float time = Time.time;
@@ -64,5 +74,28 @@ public class Hallway_Door : MonoBehaviour
             doorLock.position = new Vector3(doorToTrack.position.x - 28.74f, doorLock.position.y, doorLock.position.z);
             yield return null;
         }
-    } //het is netter om dit in de animation tree te zetten
+    }
+
+    void FX() //called by animator
+    {
+        smoke1.Play();
+        smoke2.Play();
+        smoke3.Play();
+        smoke4.Play();
+        //play sound smoke
+    }
+
+    IEnumerator CamShake() //called by animator
+    {
+        //sound
+        Vector3 originalPos = cam.localPosition;
+        float time = Time.time;
+        while (Time.time - time < 1)
+        {
+            cam.localPosition = originalPos + Random.insideUnitSphere * 0.15f;
+            yield return null;
+        }
+        cam.localPosition = originalPos;
+        
+    }
 }
