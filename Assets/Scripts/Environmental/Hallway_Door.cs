@@ -6,7 +6,7 @@ public class Hallway_Door : MonoBehaviour
     public Transform sealLockCodeText;
     public Transform sealLockHandprintText;
 
-    public Animator opening;
+    public Animator animator;
     public Transform doorToTrack;
     public Transform doorLock;
 
@@ -39,7 +39,7 @@ public class Hallway_Door : MonoBehaviour
             if (handprintOK)
             {
                 sealLockHandprintText.GetComponent<TextMesh>().text = "OK";
-                if (Counter == 4) Unlock(); //counter wordt 5 na Unlock()
+                if (Counter >= 4) Unlock(); //counter is 4 of meer na de juiste code, en wordt 5 na Unlock()
             }
             else
             {
@@ -50,17 +50,19 @@ public class Hallway_Door : MonoBehaviour
 
     void Unlock()
     {
-        Debug.Log("Unlocked");
-        opening.SetBool("Open", true);
-        Counter = 5; //voorkomt dat deze functie nog een keer 
+        Counter = 5; //voorkomt dat deze functie nog een keer afgaat
+
+        animator.SetBool("Open", true);
+        StartCoroutine(TrackDoor());
     }
 
-    void TrackDoor()
+    IEnumerator TrackDoor() //makes sure that the lock follows the door, because when parenting it fucking scales wrong
     {
-        Debug.Log("Event called");
-        while (true)
+        float time = Time.time;
+        while (Time.time - time < 10) //10 == animation duration
         {
-            doorLock.position = new Vector3(doorToTrack.position.x + (139.58f - 110.84f), doorLock.position.y, doorLock.position.z);
+            doorLock.position = new Vector3(doorToTrack.position.x - 28.74f, doorLock.position.y, doorLock.position.z);
+            yield return null;
         }
-    }
+    } //het is netter om dit in de animation tree te zetten
 }
