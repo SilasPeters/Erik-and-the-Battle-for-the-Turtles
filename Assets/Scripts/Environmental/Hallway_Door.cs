@@ -6,6 +6,10 @@ public class Hallway_Door : MonoBehaviour
     public Transform sealLockCodeText;
     public Transform sealLockHandprintText;
 
+    public Animator opening;
+    public Transform doorToTrack;
+    public Transform doorLock;
+
     private float counter;
     public float Counter
     {
@@ -18,7 +22,7 @@ public class Hallway_Door : MonoBehaviour
                 sealLockCodeText.GetComponent<TextMesh>().text = "OK";
                 if (HandprintOK) Unlock();
             }
-            else
+            else if (counter < 4)
             {
                 sealLockCodeText.GetComponent<TextMesh>().text = "ID Required";
             }
@@ -47,7 +51,16 @@ public class Hallway_Door : MonoBehaviour
     void Unlock()
     {
         Debug.Log("Unlocked");
-        //speel animatie + geluid + effects
-        Counter = 5; //voorkomt dat deze functie nog een keer afgaat
+        opening.SetBool("Open", true);
+        Counter = 5; //voorkomt dat deze functie nog een keer 
+    }
+
+    void TrackDoor()
+    {
+        Debug.Log("Event called");
+        while (true)
+        {
+            doorLock.position = new Vector3(doorToTrack.position.x + (139.58f - 110.84f), doorLock.position.y, doorLock.position.z);
+        }
     }
 }

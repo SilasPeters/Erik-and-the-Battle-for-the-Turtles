@@ -80,6 +80,8 @@ public class PlayerShoot : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Building"))
                 {
+                    //Debug.Log("Hit Building");
+                    //Debug.Log(hit.transform.gameObject);
                     GameObject hitParticle = Instantiate(building, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                 }
@@ -91,13 +93,13 @@ public class PlayerShoot : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Hallway Lock ID")) //HallwayDoor.cs : the buttons 6 and 9 on the lock have this layer
                 {
-                    Debug.Log("ID");
+                    //Debug.Log("ID");
                     //Speel sound
                     FindObjectOfType<Hallway_Door>().Counter++;
                 }
                 else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Hallway Lock Handprint")) //HallwayDoor.cs
                 {
-                    Debug.Log("Hand");
+                    //Debug.Log("Hand");
                     GameObject hitParticle = Instantiate(electrical, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                     //change hand sprite to broken screen sprite
