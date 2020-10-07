@@ -25,7 +25,7 @@ public class PlayerShoot : MonoBehaviour
     public float range = Mathf.Infinity;
     public float damage;
     public float maxAmmo;
-    private float ammo;
+    private float ammo = maxAmmo; //Changed not tested
     public float Ammo
     {
         get { return ammo; }
@@ -49,10 +49,10 @@ public class PlayerShoot : MonoBehaviour
     float timeLastExec; //this is used to not execute the code unless the last time it was done was more than X seconds ago
 
 
-    private void Start()
-    {
-        Ammo = maxAmmo;
-    }
+    //private void Start()
+    //{
+    //    Ammo = maxAmmo;
+    //} /////////////////Changed not tested
 
     void Update()
     {

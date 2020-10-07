@@ -4,7 +4,7 @@ using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 /// <To do>
-/// Gebruik "list" om oudere hitmarkers van dezelfde enemy te verwijderen, wanneer hij je nog een keer raakt
+/// Gebruik "list" om oudere hitmarkers van dezelfde enemy te verwijderen, wanneer hij je nog een keer raakt (ander idee?)
 /// </To do>
 
 public class PlayerHealth : MonoBehaviour

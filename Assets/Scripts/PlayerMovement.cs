@@ -3,10 +3,11 @@
 public class PlayerMovement : MonoBehaviour
 {
     //Problems:
-    /// isGrounded geeft heel vaak false negatives
+    /// isGrounded geeft vaak false negatives
 
     public CharacterController Controller;
     public Transform player;
+    _Cam = Camera.Main; //Changed not Tested
 
     public float MovementSpeed;
     public float sprintMultiplier;
@@ -29,7 +30,6 @@ public class PlayerMovement : MonoBehaviour
         Vector3 horizontalMove = transform.right * x + transform.forward * z;
 
 
-
         bool isGrounded = GetComponent<CharacterController>().SimpleMove(horizontalMove);
         if (isGrounded)
         {
@@ -45,11 +45,11 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKey("left shift"))
             {
                 horizontalMove = new Vector3(horizontalMove.x * sprintMultiplier, 0, horizontalMove.z * sprintMultiplier);
-                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, FOVSprint, FOVShiftTime);
+                _Cam.fieldOfView = Mathf.Lerp(_Cam.fieldOfView, FOVSprint, FOVShiftTime);
             } //sprints
             else
             {
-                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, FOVNormal, FOVShiftTime);
+                _Cam.fieldOfView = Mathf.Lerp(_Cam.fieldOfView, FOVNormal, FOVShiftTime);
             } //doesn't sprint
 
         }
