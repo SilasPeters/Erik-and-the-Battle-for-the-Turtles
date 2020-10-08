@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Somehow the animation takes twice as long as intended (0.1s in stead of 0.05s)
+/// 
+/// The ammo count is not perfectly aligned with adjustable screen sizes
 /// </summary>
 
 public class PlayerShoot : MonoBehaviour
