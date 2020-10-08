@@ -7,7 +7,6 @@ public class PlayerMovement : MonoBehaviour
 
     public CharacterController Controller;
     public Transform player;
-    _Cam = Camera.Main; //Changed not Tested
 
     public float MovementSpeed;
     public float sprintMultiplier;
@@ -45,11 +44,11 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKey("left shift"))
             {
                 horizontalMove = new Vector3(horizontalMove.x * sprintMultiplier, 0, horizontalMove.z * sprintMultiplier);
-                _Cam.fieldOfView = Mathf.Lerp(_Cam.fieldOfView, FOVSprint, FOVShiftTime);
+                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, FOVSprint, FOVShiftTime);
             } //sprints
             else
             {
-                _Cam.fieldOfView = Mathf.Lerp(_Cam.fieldOfView, FOVNormal, FOVShiftTime);
+                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, FOVNormal, FOVShiftTime);
             } //doesn't sprint
 
         }
