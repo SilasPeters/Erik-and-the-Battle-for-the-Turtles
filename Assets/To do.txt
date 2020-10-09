@@ -1,0 +1,1 @@
+1. Zorg ervoor dat de zon van de skybox matched met de directional light
