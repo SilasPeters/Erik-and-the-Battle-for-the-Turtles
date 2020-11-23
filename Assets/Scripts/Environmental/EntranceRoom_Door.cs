@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class EntranceRoom_Door : MonoBehaviour
 {
-    public Vector3 posClosed;
-    public Vector3 posOpen;
+    Vector3 posClosed;
+    Vector3 posOpen;
+    public Vector3 openedOffset;
     public Transform player;
     public Transform dialPadText;
 
@@ -21,6 +22,12 @@ public class EntranceRoom_Door : MonoBehaviour
             unlocked = value;
             dialPadText.GetComponent<TextMesh>().text = "Y u do this";
         }
+    }
+
+    private void Start()
+    {
+        posClosed = transform.position;
+        posOpen = posClosed + openedOffset;
     }
 
     // Update is called once per frame

@@ -3,14 +3,20 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    public Vector3 posClosed;
-    public Vector3 posOpen;
+    Vector3 posClosed;
+    Vector3 posOpen;
+    public Vector3 openedOffset;
     public Transform player;
 
     public float progressionPerSecond;
     public float triggerRange;
 
     private bool opened;
+    private void Start()
+    {
+        posClosed = transform.position;
+        posOpen = posOpen = posClosed + openedOffset;
+    }
 
     // Update is called once per frame
     void Update()
