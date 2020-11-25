@@ -66,8 +66,7 @@ public class PlayerShoot : MonoBehaviour
             StartCoroutine(MuzzleFlash());
             //all the visable things related to shooting
 
-            RaycastHit hit;
-            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range, raycastTarget))
+            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, range, raycastTarget))
             {
                 if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                 {
@@ -83,7 +82,7 @@ public class PlayerShoot : MonoBehaviour
                 else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Building"))
                 {
                     //Debug.Log("Hit Building");
-                    //Debug.Log(hit.transform.gameObject);
+                    //Debug.Log(hit.transform.gameObject.name);
                     GameObject hitParticle = Instantiate(building, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                 }
@@ -101,12 +100,20 @@ public class PlayerShoot : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Hallway Lock Handprint")) //HallwayDoor.cs
                 {
-                    //Debug.Log("Hand");
                     GameObject hitParticle = Instantiate(electrical, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                     //change hand sprite to broken screen sprite
                     //Speel sound
                     FindObjectOfType<Hallway_Door>().HandprintOK = true;
+                }
+                else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Decontamination")) //Door_Contamination.cs
+                {
+                    //Debug.Log("Hit");
+                    GameObject hitParticle = Instantiate(electrical, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
+                    Destroy(hitParticle, 2f);
+                    //change hand sprite to broken screen sprite
+                    //Speel sound
+                    hit.transform.GetComponentInParent<Door_Contamination>().StartCoroutine("Decontaminate"); //triggers the decontamination to start
                 }
                 else
                 {
