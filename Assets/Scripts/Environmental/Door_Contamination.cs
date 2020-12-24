@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class Door_Contamination : MonoBehaviour
 {
+    /// <summary>
+    /// this script is bugged: it will not allow the player to start the decontamination twice
+    /// However, this is perfect for the story, since the player should be locked in the room until the doors open themselves for emergency protocol needs
+    /// </summary>
+    /// 
     Vector3 posClosed;
     Vector3 posOpen;
     public Vector3 openedOffset;
@@ -25,10 +30,11 @@ public class Door_Contamination : MonoBehaviour
     
     public IEnumerator Decontaminate()
     {
+        //Debug.Log("Start");
         StartCoroutine(MoveDoor(transform, posOpen)); //open first door
         while (!hitbox.GetComponent<BoxCollision>().collidedWithPlayer) { yield return null; } //wait for player to enter
 
-        Debug.Log("2");
+        //Debug.Log("2");
         StopCoroutine("MoveDoor"); //stops the door behind you from keeping opening
         StartCoroutine(MoveDoor(transform, posClosed)); //close first door
         yield return new WaitForSeconds((1 / progressionPerSecond) + 2); //time for the door to close + 2
