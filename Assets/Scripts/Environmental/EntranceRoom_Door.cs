@@ -20,6 +20,7 @@ public class EntranceRoom_Door : MonoBehaviour
         set
         {
             unlocked = value;
+            if (dialPadText.GetComponent<TextMesh>().text != "Y u do this") {; }; //if this is the first time the door is enabled
             dialPadText.GetComponent<TextMesh>().text = "Y u do this";
         }
     }
