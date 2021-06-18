@@ -20,14 +20,16 @@ public class EnemyBehavior : MonoBehaviour
     public float flinch;
     public float accuracy;
     public float hitIndicatorOpacity;
+    public float speedRun;
+    public float speedWalk;
     //public float hitIndicatorLifetime;
 
     public float engageDistance;
     public float disengageDistance;
     public float cuddleDistance;
 
-    public float chanceToCloseDistance;
-    public float chanceToCyclePos;
+    public float timeToCloseDistance;
+    public float timeToCyclePos;
 
     private float playerDistance;
     private bool engaged;
@@ -41,51 +43,61 @@ public class EnemyBehavior : MonoBehaviour
 
     public Transform muzzleFlashPng;
     public Light muzzleFlashLight;
+    public ParticleSystem smoke;
 
     void Update()
     {
         if (health > 0) //only execute script if the enemy is still alive
         {
 
-            if (moving)
-                enemyAnimator.SetBool("Running", true);
-            else
-                enemyAnimator.SetBool("Running", false);
+            if (moving) enemyAnimator.SetBool("Running", true);
+            else enemyAnimator.SetBool("Running", false);
 
 
             playerDistance = Vector3.Distance(enemy.position, player.position);
             if (playerDistance <= engageDistance)
             {
-                engaged = true;
+                Engage();
             }
             else if (playerDistance > disengageDistance)
             {
                 engaged = false;
             }
 
-
+            // engaging
             if (engaged && !moving)
             {
                 enemy.LookAt(player.position + new Vector3(0, -10, 0));
-                if (playerDistance > cuddleDistance && Math.Round(Time.time, 0) % chanceToCloseDistance == 0) //walks towards a position around the player every 6 seconds
+                if (playerDistance > cuddleDistance && Math.Round(Time.time, 0) % timeToCloseDistance == 0) //walks towards a position around the player every 6 seconds
                 {
-                    StartCoroutine(Move(enemy.position, player.position + new Vector3(UnityEngine.Random.Range(-cuddleDistance, cuddleDistance), -6.8f, UnityEngine.Random.Range(-cuddleDistance, cuddleDistance)), 2f));
+                    //StartCoroutine(Move(enemy.localPosition, player.position+ new Vector3(UnityEngine.Random.Range(-cuddleDistance, cuddleDistance), -6.8f, UnityEngine.Random.Range(-cuddleDistance, cuddleDistance)), speedRun));
                 }
-                else if (UnityEngine.Random.Range(0, 100) <= 1 && !shooting)
+                else if (UnityEngine.Random.Range(0, 1000) <= 5 && !shooting)
                 {
                     StartCoroutine(Shoot());
-                    //Debug.Log("Shoot!");
                 }
             }
-            else if (Math.Round(Time.time, 0) % chanceToCyclePos == 0 && !moving) //walks between A and B every 10 seconds
+            else if (Math.Round(Time.time, 0) % timeToCyclePos == 0 && !moving) // not engaged, walks between A and B every 10 seconds
             {
                 if (Vector3.Distance(enemy.position, posA) < 10f) { pTarget = posB; } //at A
                 else if (Vector3.Distance(enemy.position, posB) < 10f) { pTarget = posA; } //at B
                 else { pTarget = posA; } //nowhere near A or B, and thus has to move to A
 
                 enemy.LookAt(pTarget);
-                StartCoroutine(Move(enemy.position, pTarget, 1.5f));
+                StartCoroutine(Move(enemy.localPosition, pTarget, speedWalk));
             }
+        }
+    }
+
+    private void Engage()
+    {
+        engaged = true;
+
+        //engage all siblings too
+        int siblingCount = transform.parent.childCount;
+        for (int i = 0; i < siblingCount; i++)
+        {
+            transform.parent.GetChild(i).GetComponent<EnemyBehavior>().engaged = true; ;
         }
     }
 
@@ -97,7 +109,7 @@ public class EnemyBehavior : MonoBehaviour
 
         while (Time.time - timeStarted < moveDuration)
         {
-            enemy.position = Vector3.Lerp(pStart, pEnd, (Time.time - timeStarted) / moveDuration);
+            enemy.localPosition = Vector3.Lerp(pStart, pEnd, (Time.time - timeStarted) / moveDuration);
             yield return null;
         }
 
@@ -120,6 +132,8 @@ public class EnemyBehavior : MonoBehaviour
     {
         shooting = true;
         enemyAnimator.Play("Shoot");
+
+        smoke.Play();
 
         muzzleFlashLight.range = 40;
         muzzleFlashPng.localScale = new Vector3(UnityEngine.Random.Range(0.05f * 2, 0.06f * 2), UnityEngine.Random.Range(0.05f * 2, 0.06f * 2), UnityEngine.Random.Range(0.05f * 2, 0.06f * 2));
@@ -144,5 +158,7 @@ public class EnemyBehavior : MonoBehaviour
         {
             enemy.GetComponent<Animator>().enabled = false;
         }
+
+        Engage();
     }
 }

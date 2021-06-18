@@ -68,9 +68,11 @@ public class PlayerShoot : MonoBehaviour
 
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, range, raycastTarget))
             {
+                //Debug.Log(hit.transform.gameObject.layer.ToString());
                 if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                 {
                     hit.transform.GetComponentInParent<EnemyBehavior>().TakeDamage(damage);
+                    Debug.Log(hit.transform.parent.name);
                     GameObject hitParticle = Instantiate(blood, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                 }
@@ -81,8 +83,6 @@ public class PlayerShoot : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Building"))
                 {
-                    //Debug.Log("Hit Building");
-                    //Debug.Log(hit.transform.gameObject.name);
                     GameObject hitParticle = Instantiate(building, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                 }
@@ -94,7 +94,6 @@ public class PlayerShoot : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Hallway Lock ID")) //HallwayDoor.cs : the buttons 6 and 9 on the lock have this layer
                 {
-                    //Debug.Log("ID");
                     //Speel sound
                     FindObjectOfType<Hallway_Door>().Counter++;
                 }
@@ -108,7 +107,6 @@ public class PlayerShoot : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Decontamination")) //Door_Contamination.cs
                 {
-                    //Debug.Log("Hit");
                     GameObject hitParticle = Instantiate(electrical, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                     //change hand sprite to broken screen sprite

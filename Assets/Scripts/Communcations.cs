@@ -17,7 +17,7 @@ public class Communcations : MonoBehaviour
         transform.localPosition = posInactive;
 
         //launch first instructions
-        StartCoroutine("Transmit", instructionsOnLaunch);
+        StartCoroutine(Transmit(instructionsOnLaunch));
     }
 
     void Update()
@@ -35,8 +35,7 @@ public class Communcations : MonoBehaviour
         active = true;
 
         audio.PlayDelayed(0.2f);
-        Debug.Log("Voice-line is playing");
-        while (audio.isPlaying) { yield return 0; } //keep looping until audio has been played completely
+        while (audio.isPlaying) { yield return null; } //keep looping until audio has been played completely
 
         active = false;
     }

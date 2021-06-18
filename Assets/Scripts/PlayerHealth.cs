@@ -25,7 +25,7 @@ public class PlayerHealth : MonoBehaviour
     public float maxColorGradingSaturation;
     public float colorGradingShiftSpeed;
 
-    public float regenTime;
+    public float regenDelay;
     public float regenAmountPerS;
 
     void Update()
@@ -43,18 +43,18 @@ public class PlayerHealth : MonoBehaviour
         //regelt alle visualFX
         //audio minder
 
-        if (Time.time - lastTimeHit > regenTime && playerHealth < 100) //&& playeHealth < 100 omdat je miss een keer een health boost krijgt en je niet wilt dat hij geclamped wordt naar maxHealth
+        if (Time.time - lastTimeHit > regenDelay && playerHealth < 100) //&& playeHealth < 100 omdat je miss een keer een health boost krijgt en je niet wilt dat hij geclamped wordt naar maxHealth
         {
             playerHealth = Mathf.Clamp(playerHealth + (regenAmountPerS * Time.deltaTime), 0, maxHealth);
         } //regent tot max health
 
-        //doe fov + 0.2 als je geraakt wordt, plus een hit indicator
+        //doe fov + 0.2 als je geraakt wordt
 
         if (Camera.main.transform.localEulerAngles.z != 0)
         {
             float flinchReset = Mathf.SmoothStep(Camera.main.transform.localEulerAngles.z, 0, 0.1f);
             if (flinchReset < 0.1) { flinchReset = 0; }
-            //Camera.main.transform.localEulerAngles = new Vector3(Camera.main.transform.localEulerAngles.x, Camera.main.transform.localEulerAngles.y, flinchReset);
+            Camera.main.transform.localEulerAngles = new Vector3(Camera.main.transform.localEulerAngles.x, Camera.main.transform.localEulerAngles.y, flinchReset);
         } //when taking damage the player flinches to a side, this returns it to 0 (see TakeDamage() )
     }
 
@@ -63,6 +63,12 @@ public class PlayerHealth : MonoBehaviour
         playerHealth *= damageMultiplier;
         lastTimeHit = Time.time;
 
+        Vector3 relativePosition = enemyPosition - transform.position;
+        relativePosition.y = 0; //You don't want to make Vector3.Angle add the height difference to the total angle difference
+        float angle = Vector3.Angle(relativePosition, transform.forward); //calculates the angle on wich the enemy hit (the smallest angle between the forward and relativePos factor) 
+        float amountFlich = angle;
+        if (transform.InverseTransformPoint(enemyPosition).x > 0) { angle = 360 - angle; } //if the enemy is on the right, the angle between the vectors will be substracted from 360, so that the hit indicator lands on the right side
+        
         if (hitIndicatorOpacity != 0) //do show hitindicator
         {
             Image hitIndicator = Instantiate(hitIndicatorSource, UIParent);
@@ -70,10 +76,7 @@ public class PlayerHealth : MonoBehaviour
             tempColor.a = hitIndicatorOpacity;
             hitIndicator.color = tempColor;
             //sets initial opacity of the hitIndicator
-            Vector3 relativePosition = enemyPosition - transform.position;
-            relativePosition.y = 0; //You don't want to make Vector3.Angle add the height difference to the total angle difference
-            float angle = Vector3.Angle(relativePosition, transform.forward); //calculates the angle on wich the enemy hit (the smallest angle between the forward and relativePos factor) 
-            if (transform.InverseTransformPoint(enemyPosition).x > 0) { angle = 360 - angle; } //if the enemy is on the right, the angle between the vectors will be substracted from 360, so that the hit indicator lands on the right side
+            
             hitIndicator.transform.rotation = Quaternion.Euler(hitIndicatorSource.transform.rotation.eulerAngles.x, hitIndicatorSource.transform.rotation.eulerAngles.y, angle);
             //sets rotation (Kan beter gedaan worden door LookRotation?)
     
@@ -84,12 +87,11 @@ public class PlayerHealth : MonoBehaviour
             //Fades and destroys hitIndicator
         }
 
-
-        //flinch *= Mathf.Sin(angle * (Mathf.PI / 180));
-        //Camera.main.transform.Rotate(new Vector3(0, 0, flinch));
+        flinch *= Mathf.Sin(amountFlich * (Mathf.PI / 180));
+        Camera.main.transform.Rotate(new Vector3(0, 0, flinch));
     }
 
-    public IEnumerator ImageFD(Image img)///, float duration) //image Fade & Destroy
+    public IEnumerator ImageFD(Image img) //image Fade & Destroy
     {
         float FadePerSecond = 0.20f; /// img.color.a / duration; (een vaste duratie)
 
