@@ -32,7 +32,7 @@ public class EnemyBehavior : MonoBehaviour
     public float timeToCyclePos;
 
     private float playerDistance;
-    private bool engaged;
+    public bool engaged;
     private bool moving; //prevents the coroutines from being spammed
     //private bool rotating; //prevents the coroutines from being spammed
     private bool shooting; //prevents the coroutines from being spammed
@@ -97,7 +97,7 @@ public class EnemyBehavior : MonoBehaviour
         int siblingCount = transform.parent.childCount;
         for (int i = 0; i < siblingCount; i++)
         {
-            transform.parent.GetChild(i).GetComponent<EnemyBehavior>().engaged = true; ;
+            transform.parent.GetChild(i).GetComponent<EnemyBehavior>().engaged = true;
         }
     }
 

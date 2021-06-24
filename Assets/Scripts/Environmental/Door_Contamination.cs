@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class Door_Contamination : MonoBehaviour
 {
@@ -21,7 +22,6 @@ public class Door_Contamination : MonoBehaviour
 
     public float progressionPerSecond;
     
-    
     private void Start()
     {
         posClosed = transform.position;
@@ -30,6 +30,9 @@ public class Door_Contamination : MonoBehaviour
     
     public IEnumerator Decontaminate()
     {
+        try { GetComponent<RickRoll>().Hehe(); } catch { }
+        try { GetComponent<PlayMusic>().Play(); } catch { }
+
         //Debug.Log("Start");
         StartCoroutine(MoveDoor(transform, posOpen)); //open first door
         while (!hitbox.GetComponent<BoxCollision>().collidedWithPlayer) { yield return null; } //wait for player to enter

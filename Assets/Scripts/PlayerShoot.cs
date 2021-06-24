@@ -11,7 +11,9 @@ using UnityEngine.UI;
 public class PlayerShoot : MonoBehaviour
 {
     public Animator animator;
-    public Transform cam;
+    public AudioSource soundFX;
+    public AudioClip soundAudioClip;
+    public Camera cam;
     public Transform muzzleFlashPng;
     public Light muzzleFlashLight;
 
@@ -28,6 +30,7 @@ public class PlayerShoot : MonoBehaviour
     public float damage;
     public float maxAmmo;
     private float ammo;
+    public float recoilIntensity;
     public float Ammo
     {
         get { return ammo; }
@@ -62,7 +65,9 @@ public class PlayerShoot : MonoBehaviour
         {
             timeLastExec = Time.time; //sets timer
             Ammo -= 1;
-            animator.Play("Recoil"); //let's the recoil hit once
+            animator.Play("Recoil");
+            soundFX.PlayOneShot(soundAudioClip);
+            StartCoroutine(Recoil());
             StartCoroutine(MuzzleFlash());
             //all the visable things related to shooting
 
@@ -72,7 +77,7 @@ public class PlayerShoot : MonoBehaviour
                 if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                 {
                     hit.transform.GetComponentInParent<EnemyBehavior>().TakeDamage(damage);
-                    Debug.Log(hit.transform.parent.name);
+                    //Debug.Log(hit.transform.parent.name);
                     GameObject hitParticle = Instantiate(blood, hit.point, Quaternion.LookRotation(hit.normal), EDParent);
                     Destroy(hitParticle, 2f);
                 }
@@ -130,6 +135,22 @@ public class PlayerShoot : MonoBehaviour
         {
             StartCoroutine(Reload());
         }
+    }
+
+    IEnumerator Recoil()
+    {
+        float oldFOV = cam.fieldOfView;
+        float newFOV = cam.fieldOfView + recoilIntensity;
+        float timeStart = Time.time;
+
+        float progress = 0;
+        while (progress <= 1)
+        {
+            cam.fieldOfView = newFOV - progress * recoilIntensity;
+            progress = (Time.time - timeStart) / 0.0015f;
+            yield return null;
+        }
+        cam.fieldOfView = oldFOV;
     }
 
     IEnumerator MuzzleFlash()

@@ -14,6 +14,7 @@ public class EntranceRoom_Door : MonoBehaviour
 
     private bool opened;
     private bool unlocked;
+    //private bool musicStarted;
     public bool Unlocked
     {
         get { return unlocked; }
@@ -36,6 +37,11 @@ public class EntranceRoom_Door : MonoBehaviour
     {
         if (Unlocked) //unlocked becomes true when PlayerShoot.cs hits the dialpad at the entrance (which triggers Unlock() )
         {
+            /*if (!musicStarted)
+            {
+                GetComponent<PlayMusic>().Play();
+                musicStarted = true;
+            }*/
             if (Vector3.Distance(player.position, posClosed) <= triggerRange && !opened) //has to open
             {
                 StopAllCoroutines();
